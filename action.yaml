@@ -1,5 +1,11 @@
 name: 'Package PowerShell Script as EXE'
 description: 'Reusable action to package a PowerShell script into an executable using GitVersion for tagging.'
+author: "edgeforge-labs"
+
+branding:
+  icon: 'package'  # Options include 'package', 'code', 'gear', 'cloud', etc.
+  color: 'blue'    # Supported colors include 'blue', 'green', 'purple', 'red', 'yellow', or a hex code (e.g., '#0366d6')
+
 
 inputs:
   name:
