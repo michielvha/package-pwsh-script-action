@@ -1,0 +1,54 @@
+name: 'Package PowerShell Script as EXE'
+description: 'Reusable action to package a PowerShell script into an executable using GitVersion for tagging.'
+
+inputs:
+  name:
+    description: 'the name of the script, defaults to main'
+    required: true
+    default: main
+  script-path:
+    description: 'Path to the main PowerShell script to package'
+    required: true
+    default: 'pwsh/scripts/main.ps1'
+  config-file:
+    description: 'Path to the GitVersion configuration file'
+    required: false
+    default: 'gitversion.yml'
+
+
+runs:
+  using: "composite"
+  steps:
+    # Step 1: Checkout the repository with full history and tags
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Fetch all history to use GitVersion
+        persist-credentials: true
+
+    # Step 2: Call the GitVersion action to tag the version
+    - name: Tag with GitVersion
+      id: gitversion
+      uses: MKTHEPLUGG/gitversion-tag-action@v3
+      with:
+        configFilePath: ${{ inputs.config-file }}
+
+    # Step 3: Install and Import PS2EXE module
+    - name: Install and Import PS2EXE module
+      run: |
+        Install-Module -Name PS2EXE -Force -AllowClobber
+        Import-Module PS2EXE
+      shell: powershell
+
+    # Step 6: Package the PowerShell script into an executable using the GitVersion output
+    - name: Package PowerShell script into EXE
+      run: |
+        ps2exe -InputFile "${{ inputs.script-path }}" -OutputFile "${{ inputs.name }}-${{ steps.gitversion.outputs.semVer }}.exe"
+      shell: powershell
+
+    # Step 7: Upload the executable as a versioned artifact
+    - name: Upload packaged EXE
+      uses: actions/upload-artifact@v4
+      with:
+        name: "${{ inputs.name }}-${{ steps.gitversion.outputs.semVer }}"
+        path: ${{ inputs.name }}-${{ steps.gitversion.outputs.semVer }}.exe
