@@ -91,10 +91,6 @@ For the above example, ensure your repository has the following structure:
 │   └── scripts
 │       └── main.ps1          # PowerShell script to package
 ├── gitversion.yml            # GitVersion configuration file
-├── .github
-│   └── actions
-│       └── package-powershell-script
-│           └── action.yml    # Action definition file
 └── .github
     └── workflows
         └── package.yml       # Workflow using the action
