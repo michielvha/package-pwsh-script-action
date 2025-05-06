@@ -68,7 +68,7 @@ jobs:
           fetch-depth: 0  # Fetch all history for GitVersion to work
 
       - name: Package PowerShell Script
-        uses: MKTHEPLUGG/package-pwsh-script-action@v1
+        uses: michielvha/package-pwsh-script-action@v1
         with:
           name: 'PDS'
           script-path: 'pwsh/scripts/main.ps1'
