@@ -2,6 +2,13 @@
 
 This GitHub Action packages a specified PowerShell script into an executable (`.exe`) file. It uses [GitVersion](https://gitversion.net/) to automatically version the packaged executable, making it ideal for workflows that need versioned releases of PowerShell scripts. This action is reusable across projects, allowing consistent and efficient packaging with minimal configuration.
 
+## Enhancements
+
+Allow for specifying more optional input parameters:
+- icon file
+- title
+- ...
+
 ## Features
 
 - **Automatic Versioning**: Utilizes GitVersion to apply semantic versioning based on your Git history.
