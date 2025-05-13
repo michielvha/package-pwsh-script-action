@@ -9,6 +9,8 @@ Allow for specifying more optional input parameters:
 - title
 - ...
 
+All possibilities can be found [here](https://github.com/MScholtes/PS2EXE/tree/master?tab=readme-ov-file#parameter)
+
 ## Features
 
 - **Automatic Versioning**: Utilizes GitVersion to apply semantic versioning based on your Git history.
