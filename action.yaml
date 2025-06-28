@@ -35,7 +35,7 @@ runs:
     # Step 2: Call the GitVersion action to tag the version
     - name: Tag with GitVersion
       id: gitversion
-      uses: MKTHEPLUGG/gitversion-tag-action@v3
+      uses: michielvha/gitversion-tag-action@v5
       with:
         configFilePath: ${{ inputs.config-file }}
 
