@@ -27,7 +27,7 @@ runs:
   steps:
     # Step 1: Checkout the repository with full history and tags
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         fetch-depth: 0  # Fetch all history to use GitVersion
         persist-credentials: true
