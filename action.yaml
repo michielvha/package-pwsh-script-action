@@ -54,7 +54,7 @@ runs:
 
     # Step 7: Upload the executable as a versioned artifact
     - name: Upload packaged EXE
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: "${{ inputs.name }}-${{ steps.gitversion.outputs.semVer }}"
         path: ${{ inputs.name }}-${{ steps.gitversion.outputs.semVer }}.exe
