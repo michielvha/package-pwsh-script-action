@@ -33,7 +33,8 @@ Describe 'build.ps1' {
         $run.Exit | Should -Be 0 -Because $run.Log
         $exe = Join-Path $run.Output 'Hello-1.2.3.exe'
         $exe | Should -Exist
-        (& $exe) | Should -Be 'hello from the packaged script'
+        # A PS2EXE executable reads redirected standard input; pipe nothing so it ends at once.
+        ($null | & $exe) | Should -Be 'hello from the packaged script'
         Get-Content -LiteralPath $run.GitHubOutput | Should -Contain "file=$exe"
     }
 

@@ -1,0 +1,4 @@
+# The PS2EXE module build.ps1 installs from the PowerShell Gallery, refused unless its package's
+# SHA-256 matches. Renovate updates the version; refresh the sha256 in the same change from
+# https://www.powershellgallery.com/api/v2/package/ps2exe/<version>.
+ps2exe 1.0.18 sha256=692124163d0e71262d76e2f2b2588e1661df28a8f0cf3b1725e47a957afce39f
