@@ -1,0 +1,66 @@
+name: Test
+
+# The checks that must pass before release.yml tags. release.yml calls this
+# workflow, so the checks are defined once.
+on:
+  workflow_call:
+  workflow_dispatch:
+
+permissions: {}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Lint workflows
+        uses: docker://rhysd/actionlint:1.7.12@sha256:b1934ee5f1c509618f2508e6eb47ee0d3520686341fec936f3b79331f9315667
+        with:
+          args: -color
+
+  checks:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Format, analyze and test the scripts
+        uses: vhco-pro/pwsh-ci-action@7b21017e8ec66c33deb3be79b7ad2b444c20fd33 # v0.1.0
+
+  end-to-end:
+    runs-on: windows-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Package the fixture script
+        id: package
+        uses: ./
+        with:
+          script-path: tests/fixture/hello.ps1
+          name: Hello
+          tag: v0.0.1
+      - name: Check the executable
+        shell: pwsh
+        env:
+          EXECUTABLE: ${{ steps.package.outputs.file }}
+        run: ./tests/Assert-Executable.ps1 -Path $env:EXECUTABLE -Expected 'hello from the packaged script'

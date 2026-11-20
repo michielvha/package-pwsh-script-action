@@ -1,0 +1,58 @@
+name: Release
+
+# Tests first: the tag is the release, and consumers can use it once it exists.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: Render notes without creating a tag or release
+        type: boolean
+        default: true
+
+permissions: {}
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  test:
+    permissions:
+      contents: read
+    uses: ./.github/workflows/test.yml
+
+  mode:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions: {}
+    outputs:
+      dry-run: ${{ steps.mode.outputs.dry-run }}
+    steps:
+      - name: Decide whether this run releases
+        id: mode
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          DISPATCH_DRY_RUN: ${{ inputs.dry-run }}
+        run: |
+          case "$EVENT_NAME" in
+            pull_request) dry_run=true ;;
+            workflow_dispatch) dry_run="$DISPATCH_DRY_RUN" ;;
+            *) dry_run=false ;;
+          esac
+          printf 'dry-run=%s\n' "$dry_run" >> "$GITHUB_OUTPUT"
+
+  release:
+    needs: [test, mode]
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+    permissions:
+      contents: write
+    uses: vhco-pro/gh-release-workflow/.github/workflows/gh-release.yml@b18de6d2f305f971afe01ba31e17bde5966b1567 # v0.1.1
+    with:
+      dry-run: ${{ fromJSON(needs.mode.outputs.dry-run) }}

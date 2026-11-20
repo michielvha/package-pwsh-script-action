@@ -1,0 +1,16 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended", "helpers:pinGitHubActionDigests"],
+  "automerge": false,
+  "customManagers": [
+    {
+      // The PS2EXE module build.ps1 installs. Renovate bumps the version only; the same PR
+      // must refresh its sha256 from the Gallery package.
+      "customType": "regex",
+      "managerFilePatterns": ["/^ps2exe\\.pins$/"],
+      "matchStrings": ["(?<depName>\\S+) (?<currentValue>\\d+\\.\\d+\\.\\d+) sha256="],
+      "datasourceTemplate": "nuget",
+      "registryUrlTemplate": "https://www.powershellgallery.com/api/v2/"
+    }
+  ]
+}
