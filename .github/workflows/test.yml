@@ -59,6 +59,9 @@ jobs:
           script-path: tests/fixture/hello.ps1
           name: Hello
           tag: v0.0.1
+      - name: Check that pwsh steps run the pinned PowerShell
+        shell: pwsh
+        run: ./tests/Assert-PinnedPwsh.ps1
       - name: Check the executable
         shell: pwsh
         env:
