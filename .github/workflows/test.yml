@@ -41,7 +41,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Format, analyze and test the scripts
-        uses: vhco-pro/pwsh-ci-action@7b21017e8ec66c33deb3be79b7ad2b444c20fd33 # v0.1.0
+        uses: vhco-pro/pwsh-ci-action@0d93cdc9722375b2e5423dd886c8e3878d4bebf0 # v0.1.1
 
   end-to-end:
     runs-on: windows-latest
